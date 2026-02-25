@@ -1,0 +1,12 @@
+.DS_Store 
+*.asv 
+*.slxc 
+*.mex* 
+*.log 
+Backup/ 
+*.aux 
+*.out 
+*.toc 
+*.synctex.gz 
+*.blg 
+*.bbl 
