@@ -1,0 +1,90 @@
+function U = Policy_Exp_Welfare(x,Policy_Exp)
+
+    load('base')
+    epsilon_cal = epsilon_alt;                                                   
+
+    tauc_shock = ones(T+2, 1);
+    taud_shock = ones(T+2, 1);
+    
+
+    if Policy_Exp == 1
+        tauc_shock(1) = 1;     
+        tauc_shock(2) = x(1,1);
+        tauc_shock(3) = x(2,1);
+        tauc_shock(4) = x(3,1);
+        tauc_shock(5) = x(4,1);
+        tauc_shock(6) = x(5,1);
+        tauc_shock(7) = x(6,1);
+        tauc_shock(8) = x(7,1);
+        tauc_shock(9) = x(8,1);
+        tauc_shock(10) = x(9,1);
+        tauc_shock(11) = x(10,1);
+        tauc_shock(12) = x(11,1);
+        tauc_shock(13) = x(12,1);
+        tauc_shock(14) = x(13,1);
+        tauc_shock(15) = x(14,1);
+        tauc_shock(16) = x(15,1);
+        tauc_shock(17) = x(16,1);
+        tauc_shock(18) = x(17,1);
+        tauc_shock(19) = x(18,1);
+        tauc_shock(20) = x(19,1);
+        tauc_shock(21:40) = x(20,1);
+        tauc_shock(41:80) = x(21,1);
+        tauc_shock(81:120) = x(22,1);
+        tauc_shock(121:160) = x(23,1);
+        tauc_shock(161:200) = x(24,1);
+        tauc_shock(201:240) = x(25,1);
+        tauc_shock(241:280) = x(26,1);
+        tauc_shock(281:320) = x(27,1);
+        tauc_shock(241:280) = x(26,1);
+        tauc_shock(21:40) = x(20,1);
+        tauc_shock(351:T+2) = x(2,1);
+    else
+        taud_shock(1) = 1;     
+        taud_shock(2:350) = x(1,1);
+        taud_shock(351:T+2) = x(2,1);
+    end
+
+    % tauc_shock(2:2) = coef(1,1);
+    % tauc_shock(3:4) = coef(2,1);
+    % tauc_shock(5:6) = coef(3,1);
+    % tauc_shock(7:8) = coef(4,1);
+    % tauc_shock(9:10) = coef(5,1);
+    % tauc_shock(11:12) = coef(6,1);
+    % tauc_shock(13:14) = coef(7,1);
+    % tauc_shock(15:16) = coef(8,1);
+    % tauc_shock(17:18) = coef(9,1);
+    % tauc_shock(19:20) = coef(10,1);
+    % tauc_shock(21:40) = coef(11,1);
+    % tauc_shock(41:80) = coef(12,1);
+    % tauc_shock(81:120) = coef(13,1);
+    % tauc_shock(121:160) = coef(14,1);
+    % tauc_shock(161:200) = coef(15,1);
+    % tauc_shock(201:240) = coef(16,1);
+    % tauc_shock(241:280) = coef(17,1);
+    % tauc_shock(281:320) = coef(18,1);
+    % tauc_shock(321:360) = coef(19,1);
+    % tauc_shock(361:T+2) = coef(20,1);
+                                             
+    
+    tauc_end = tauc_shock(T+2);
+    taud_end = taud_shock(T+2);
+
+    save('dynare_in');
+
+    dynare ModelFinal
+
+    load ModelFinal_results.mat oo_ M_ options_
+
+    idx_c = strmatch('c', M_.endo_names, 'exact');
+    c_in = oo_.endo_simul(idx_c, :);
+
+    idx_zd = strmatch('zd', M_.endo_names, 'exact');
+    zd_in = oo_.endo_simul(idx_zd, :);
+
+    C_out = c_in'.*Level;
+    Zd_out = zd_in'.*Level;
+
+    U = - welfarePOP(C_out, Zd_out, mep2, beta_cal, g_cal, eta0, eta_g_cal, gl_cal, L);
+
+end
